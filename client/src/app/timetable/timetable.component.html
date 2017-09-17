@@ -1,0 +1,61 @@
+<button type="button" class="btn btn-success btn-circle btn-xs" (click)="newRecord()">
+  <i class="fa fa-plus" aria-hidden="true"></i>
+</button>
+<table data-datatable="ng" class="table">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Comment</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dirtyBean of timesheetDirtyBeans">
+      <td>
+        <select [(ngModel)]="dirtyBean.task" required>
+          <option *ngFor="let task of tasks" [value]="task.id">{{task.name}}</option>
+        </select>
+      </td>
+      <td>
+        <input type="date" [value]="today | date : format : timezone">
+      </td>
+      <td>
+        <input [(ngModel)]="dirtyBean.duration" placeholder="0" type="number" min="0.5" max="8" step="0.5" required>
+      </td>
+      <td>
+        <input [(ngModel)]="dirtyBean.comment" placeholder="comment">
+      </td>
+      <td>
+        <i class="fa fa-floppy-o" aria-hidden="true" (click)="saveSingleBean(dirtyBean)"></i>
+        <i class="fa fa-trash" aria-hidden="true" (click)="trashNewRecord(dirtyBean)"></i>
+      </td>
+    </tr>
+    <tr *ngFor="let bean of timesheetBeans">
+      <td>
+        {{bean.name}}
+      </td>
+      <td>
+        {{bean.dat}}
+      </td>
+      <td>
+        {{bean.time}}
+      </td>
+      <td>
+        {{bean.comment}}
+      </td>
+      <td>
+        <i class="fa fa-heart-o" aria-hidden="true"></i>
+        <i class="fa fa-trash" aria-hidden="true" (click)="deleteRecord(bean)"></i>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="100%">
+        Showing {{timesheetBeans?.length}} to 1 of 1 entries
+      </td>
+    </tr>
+  </tfoot>
+</table>
