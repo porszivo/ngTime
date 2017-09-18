@@ -1,8 +1,8 @@
 import {Component, OnInit, Pipe, PipeTransform} from '@angular/core';
-import {TimesheetbeanService} from "../service/timesheetbean.service";
-import {TimesheetBean} from "../model/timesheetbean";
-import {Task} from "../model/task";
-import {TaskService} from "../service/task.service";
+import {TimesheetbeanService} from '../service/timesheetbean.service';
+import {TimesheetBean} from '../model/timesheetbean';
+import {Task} from '../model/task';
+import {TaskService} from '../service/task.service';
 
 @Component({
   selector: 'app-timetable',
@@ -28,7 +28,7 @@ export class TimetableComponent implements OnInit {
       this.timesheetbeanService.getDevices()
         .then(beans => {
           this.timesheetBeans = beans;
-        })
+        });
   }
 
   listTasks() {
@@ -41,24 +41,24 @@ export class TimetableComponent implements OnInit {
   }
 
   trashNewRecord(dirtyBean: any) {
-    var index = this.timesheetDirtyBeans.indexOf(dirtyBean);
-    if(index>=0) {
+    let index = this.timesheetDirtyBeans.indexOf(dirtyBean);
+    if (index >= 0) {
         this.timesheetDirtyBeans.splice(index, 1);
     }
   }
 
   saveSingleBean(dirtyBean: TimesheetBean) {
-    if(dirtyBean.task != null && dirtyBean.duration != null) {
+    if (dirtyBean.task != null && dirtyBean.duration != null) {
       this.trashNewRecord(dirtyBean);
       this.timesheetbeanService.newBean(dirtyBean);
     }
   }
 
   deleteRecord(bean: TimesheetBean) {
-    if(bean != null) {
+    if (bean != null) {
       this.timesheetbeanService.deleteRecord(bean);
-      var index = this.timesheetBeans.indexOf(bean);
-      if(index>=0) {
+      let index = this.timesheetBeans.indexOf(bean);
+      if (index >= 0) {
         this.timesheetBeans.splice(index, 1);
       }
     }

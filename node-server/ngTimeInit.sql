@@ -28,3 +28,11 @@ INSERT INTO timerecord (task, dat, time, comment)
 
 INSERT INTO timerecord (task, dat, time, comment)
 VALUES(2, '16.09.2017', '1', 'Setup Nodejs Server');
+
+-- TODO: Needs to make secure
+CREATE TABLE user_tbl (
+  ID SERIAL PRIMARY KEY,
+  name VARCHAR UNIQUE,
+  password VARCHAR,
+  salt VARCHAR
+);

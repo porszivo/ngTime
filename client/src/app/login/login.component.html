@@ -1,0 +1,26 @@
+<div class="login-page">
+  <div class="form">
+    <form class="register" *ngIf="!loginView" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+
+      <input name="username" type="text" placeholder="username" required ngModel/>
+      <input name="password" type="password" placeholder="password" required ngModel/>
+      <input name="email" type="text" placeholder="email address" required ngModel/>
+
+      <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>
+
+      <button>create</button>
+      <p class="message">Have an account? <span (click)="(loginView = !loginView) && (errorState = false)">Log in</span></p>
+    </form>
+
+    <form class="login" *ngIf="loginView" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+
+      <input name="username" type="text" placeholder="username" required ngModel/>
+      <input name="password" type="password" placeholder="password" required ngModel/>
+
+      <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>
+
+      <button>login</button>
+      <p class="message">No account? <span (click)="(loginView = !loginView) && (errorState = false)">Sign up</span></p>
+    </form>
+  </div>
+</div>
