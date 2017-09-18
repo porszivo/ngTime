@@ -1,3 +1,4 @@
+.idea
 .metadata
 bin/
 tmp/
@@ -72,3 +73,5 @@ typings/
 
 # dotenv environment variables file
 .env
+node-server/public/images/
+node-server/public/javascripts/

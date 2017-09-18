@@ -1,12 +1,4 @@
-var promise = require('bluebird');
-
-var options = {
-    promiseLib: promise
-};
-
-var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://postgres:postgres@localhost:5432/ngtime';
-var db = pgp(connectionString);
+var db = require('../../config/database');
 
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
@@ -49,9 +41,7 @@ function getSingleTimeRecord(req, res, next) {
 }
 
 function createTimeRecord(req, res, next) {
-    console.log("kommt an");
     req.body.task = parseInt(req.body.task);
-    console.log(req.body);
     db.none('insert into timerecord(task, dat, time, comment)' +
             'values(${task}, ${dat}, ${duration}, ${comment})', req.body)
         .then(function() {
@@ -89,8 +79,7 @@ function removeTimeRecord(req, res, next) {
         .then(function (result) {
             res.status(200)
                 .json({
-                    status: 'success',
-                    message: `Removed ${result.rowCount} puppy`
+                    status: 'success'
                 });
         })
         .catch(function (err) {
