@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var userq = require('./api/user_queries');
-var timerecords = require('./api/queries');
+var timerecords = require('./api/timerecord_queries');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,5 +18,6 @@ router.get('/api/tasks', timerecords.getAllTasks);
 
 router.post('/api/user', userq.createNewUser);
 router.post('/api/login', userq.loginUser);
+router.post('/api/logout', userq.logoutUser);
 
 module.exports = router;

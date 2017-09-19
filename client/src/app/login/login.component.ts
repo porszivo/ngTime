@@ -3,7 +3,7 @@ import {NgForm} from '@angular/forms';
 import {AccessService} from '../service/access.service';
 import {Router} from '@angular/router';
 
-// TODO: Animate change of register and login view
+// TODO: Better animation: change of register and login view
 
 @Component({
   selector: 'app-login',
@@ -25,6 +25,16 @@ export class LoginComponent {
         this.errorState = true;
         this.errorMessage = 'All fields are mandatory';
       } else {
+        this.accessService.registerUser(form.value['username'], form.value['password'], form.value['email'])
+          .then(success => {
+            if(success) {
+              this.loginView = true;
+              this.errorState = false;
+            } else {
+              this.errorState = !success;
+              this.errorMessage = "Woops,... something went wrong!";
+            }
+          });
       }
     } else {
       if (!form.value['username'] || !form.value['password']) {

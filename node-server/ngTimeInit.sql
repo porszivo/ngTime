@@ -3,6 +3,16 @@ CREATE DATABASE ngtime;
 
 \c ngtime;
 
+CREATE TABLE user_tbl (
+  ID SERIAL PRIMARY KEY,
+  name VARCHAR UNIQUE,
+  password VARCHAR,
+  email VARCHAR,
+  confirmhash VARCHAR,
+  activated BOOLEAN default FALSE,
+  failed_try INTEGER default 0
+);
+
 CREATE TABLE task (
   ID SERIAL PRIMARY KEY,
   name VARCHAR,
@@ -12,9 +22,10 @@ CREATE TABLE task (
 CREATE TABLE timerecord (
   ID SERIAL PRIMARY KEY,
   task INTEGER REFERENCES task (ID),
-  dat VARCHAR,
+  dat DATE,
   time NUMERIC,
-  comment VARCHAR
+  comment VARCHAR,
+  uID INTEGER REFERENCES user_tbl (ID)
 );
 
 INSERT INTO task (name, description)
@@ -22,17 +33,3 @@ INSERT INTO task (name, description)
 
 INSERT INTO task (name, description)
 VALUES('Backend', 'Node Backend');
-
-INSERT INTO timerecord (task, dat, time, comment)
-    VALUES(1, '16.09.2017', '1', 'Ging einwandfrei');
-
-INSERT INTO timerecord (task, dat, time, comment)
-VALUES(2, '16.09.2017', '1', 'Setup Nodejs Server');
-
--- TODO: Needs to make secure
-CREATE TABLE user_tbl (
-  ID SERIAL PRIMARY KEY,
-  name VARCHAR UNIQUE,
-  password VARCHAR,
-  salt VARCHAR
-);
