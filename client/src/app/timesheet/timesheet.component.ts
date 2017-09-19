@@ -14,10 +14,9 @@ export class TimesheetComponent implements OnInit {
   ngOnInit() {
   }
 
-  logout() {
+  logout(): void {
     this.accessService.logoutUser();
-    this.router.navigate(['/login']);
-    console.log(localStorage);
+    this.router.navigate(["/login"]);
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, Pipe, PipeTransform} from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 import {TimesheetbeanService} from '../service/timesheetbean.service';
 import {TimesheetBean} from '../model/timesheetbean';
 import {Task} from '../model/task';
@@ -14,7 +14,6 @@ export class TimetableComponent implements OnInit {
   timesheetBeans: TimesheetBean[];
   timesheetDirtyBeans: TimesheetBean[] = [];
   tasks: Task[];
-  today: Date = new Date();
 
   constructor(private timesheetbeanService: TimesheetbeanService,
   private taskService: TaskService) { }
@@ -25,7 +24,7 @@ export class TimetableComponent implements OnInit {
   }
 
   listTimesheetBeans() {
-      this.timesheetbeanService.getDevices()
+      this.timesheetbeanService.getTimesheetBeans()
         .then(beans => {
           this.timesheetBeans = beans;
         });

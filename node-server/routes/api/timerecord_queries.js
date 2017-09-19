@@ -1,4 +1,6 @@
 var db = require('../../config/database');
+var user = require('../../functions/user_functions');
+var config = require('../../config/config');
 
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
@@ -10,18 +12,28 @@ module.exports = {
 };
 
 function getAllTimeRecords(req, res, next) {
-    db.any('select r.id, r.task, r.dat, r.time, r.comment, t.name from timerecord r left join task t on t.id = r.task')
-        .then(function(data) {
-            res.status(200)
+    req.body.task = parseInt(req.body.task);
+    user.verifyToken(req.headers.token, function(id) {
+        if (id < 0) {
+            res.status(401)
                 .json({
-                    status: 'success',
-                    data: data,
-                    message: 'Retrieved ALL records'
-                });
-        })
-        .catch(function(err) {
-            return next(err);
-        });
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+        db.any('select r.id, r.task, r.dat, r.time, r.comment, t.name from timerecord r left join task t on t.id = r.task where uid = $1', id)
+            .then(function (data) {
+                res.status(200)
+                    .json({
+                        status: 'success',
+                        data: data,
+                        message: 'Retrieved ALL records'
+                    });
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    });
 }
 
 function getSingleTimeRecord(req, res, next) {
@@ -32,7 +44,7 @@ function getSingleTimeRecord(req, res, next) {
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Retrieved ONE puppy'
+                    message: 'Retrieved ONE record'
                 });
         })
         .catch(function (err) {
@@ -42,18 +54,29 @@ function getSingleTimeRecord(req, res, next) {
 
 function createTimeRecord(req, res, next) {
     req.body.task = parseInt(req.body.task);
-    db.none('insert into timerecord(task, dat, time, comment)' +
-            'values(${task}, ${dat}, ${duration}, ${comment})', req.body)
-        .then(function() {
-            res.status(200)
+    user.verifyToken(req.headers.token, function(id) {
+        if(id<0) {
+            res.status(401)
                 .json({
-                    status: 'success',
-                    message: 'Inserted record'
-                });
-        })
-        .catch(function(err){
-            return next(err);
-        });
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+        //db.none(db.insert_sql, {task: req.body.task, dat: req.body.dat, duration: req.body.duration, comment: req.body.comment, uid: id})
+        var sql = 'insert into timerecord(task, dat, time, comment, uid) values (${task}, to_date(${dat}, \'DD-MM-YYYY\'), ${duration}, ${comment}, '+id+')';
+        db.none(sql, req.body)
+            .then(function() {
+                res.status(200)
+                    .json({
+                        status: 'success',
+                        message: 'Inserted record'
+                    });
+            })
+            .catch(function(err){
+                console.log(err.message);
+                return next(err);
+            });
+    });
 }
 
 function updateTimeRecord(req, res, next) {
@@ -89,6 +112,7 @@ function removeTimeRecord(req, res, next) {
 }
 
 function getAllTasks(req, res, next) {
+
     db.any('select * from task')
         .then(function(result) {
             res.status(200)
