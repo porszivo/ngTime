@@ -32,7 +32,7 @@ export class TimesheetbeanService {
   }
 
   deleteRecord(bean: TimesheetBean) {
-    return this.http.delete(this.url + "/timerecord/" + bean.id)
+    return this.http.delete(this.url + "/timerecord/" + bean.id, {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(() => null)
       .catch(this.handleError);

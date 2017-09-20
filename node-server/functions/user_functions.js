@@ -17,10 +17,3 @@ function verifyToken(token, callback) {
             return callback(err);
         });
 }
-
-function calculateData(data) {
-
-
-
-    return null;
-}

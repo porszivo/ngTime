@@ -1,12 +1,12 @@
 var db = require('../../config/database');
 var user = require('../../functions/user_functions');
 var config = require('../../config/config');
+var sql = require('../../functions/loadQueries').timerecords;
 
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
     getSingleTimeRecord: getSingleTimeRecord,
     createTimeRecord: createTimeRecord,
-    updateTimeRecord: updateTimeRecord,
     removeTimeRecord: removeTimeRecord,
     getAllTasks: getAllTasks
 };
@@ -62,10 +62,9 @@ function createTimeRecord(req, res, next) {
                     message: "Bad credentials"
                 })
         }
-        //db.none(db.insert_sql, {task: req.body.task, dat: req.body.dat, duration: req.body.duration, comment: req.body.comment, uid: id})
-        var sql = 'insert into timerecord(task, dat, time, comment, uid) values ' +
-            '(${task}, to_date(${dat}, \'DD-MM-YYYY\'), ${duration}, ${comment}, '+id+')';
-        db.none(sql, req.body)
+        var params = req.body;
+        params.id = id;
+        db.none(sql.timerecordCreate, params)
             .then(function() {
                 res.status(200)
                     .json({
@@ -80,35 +79,31 @@ function createTimeRecord(req, res, next) {
     });
 }
 
-function updateTimeRecord(req, res, next) {
-    db.none('update pups set name=$1, breed=$2, age=$3, sex=$4 where id=$5',
-        [req.body.name, req.body.breed, parseInt(req.body.age),
-            req.body.sex, parseInt(req.params.id)])
-        .then(function () {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    message: 'Updated puppy'
-                });
-        })
-        .catch(function (err) {
-            return next(err);
-        });
-}
-
 function removeTimeRecord(req, res, next) {
-    var recordId = parseInt(req.params.id);
-    console.log(req.params);
-    db.result('delete from timerecord where id = $1', recordId)
-        .then(function (result) {
-            res.status(200)
+    var params = {};
+    user.verifyToken(req.headers.token, function(id) {
+        if (id < 0) {
+            res.status(401)
                 .json({
-                    status: 'success'
-                });
-        })
-        .catch(function (err) {
-            return next(err);
-        });
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+
+        params.id = parseInt(req.params.id);
+        params.uid = id;
+
+        db.result('delete from timerecord where id = ${id} AND uid = ${uid}', params)
+            .then(function (result) {
+                res.status(200)
+                    .json({
+                        status: 'success'
+                    });
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    });
 
 }
 

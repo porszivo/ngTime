@@ -8,6 +8,11 @@ function sql(file) {
 
 module.exports = {
     users: {
-        userData: sql('./sql/userdata.sql')
+        userLogin: sql('./sql/user_login.sql'),
+        userData: sql('./sql/user_data.sql'),
+        userRegister: sql('./sql/user_register.sql')
+    },
+    timerecords: {
+        timerecordCreate: sql('./sql/timerecord_create.sql')
     }
 };
