@@ -39,8 +39,9 @@ export class AccessService implements CanActivate {
     if (this.token == null) {
       return null;
     }
-    this.headers.append(this.token_name, this.token);
-    return this.headers;
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append(this.token_name, this.token);
+    return headers;
 
   }
 
