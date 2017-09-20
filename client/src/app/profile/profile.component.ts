@@ -24,9 +24,9 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserData()
       .then(data => {
         this.username = data.name;
-        this.favTask = data.task;
-        this.totalHoursWeek = data.week;
-        this.totalHoursMonth = data.month
+        data.task ? this.favTask = data.task : this.favTask = 'No Task yet';
+        data.week ? this.totalHoursWeek = data.week : this.totalHoursWeek = 0;
+        data.month ? this.totalHoursMonth = data.month : this.totalHoursMonth = 0;
       });
   }
 

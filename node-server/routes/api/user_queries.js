@@ -21,8 +21,7 @@ module.exports = {
  * */
 function createNewUser(req, res, next) {
     req.body.password = crypte.cryptPassword(req.body.password);
-    db.none('insert into user_tbl(name, password, email)' +
-        'values(${username}, ${password}, ${email})', req.body)
+    db.none(sql.userRegister, req.body)
         .then(function() {
             res.status(200)
                 .json({
@@ -44,7 +43,7 @@ function createNewUser(req, res, next) {
  */
 function loginUser(req, res, next) {
     if(req.body['username'] && req.body['password']) {
-        db.one('select * from user_tbl where name = $1', req.body['username'])
+        db.one(sql.userLogin, req.body['username'])
             .then(function (data) {
                 if (crypte.comparePassword(req.body['password'], data.password)) {
                     var token = jwt.sign(

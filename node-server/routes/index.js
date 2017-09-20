@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
 router.get('/api/timerecord', timerecords.getAllTimeRecords);
 router.get('/api/timerecord/:id', timerecords.getSingleTimeRecord);
 router.post('/api/timerecord', timerecords.createTimeRecord);
-router.put('/api/timerecord/:id', timerecords.updateTimeRecord);
 router.delete('/api/timerecord/:id', timerecords.removeTimeRecord);
 router.get('/api/tasks', timerecords.getAllTasks);
 
