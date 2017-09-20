@@ -2,9 +2,10 @@
   <div class="form">
     <form class="register" *ngIf="!loginView" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
 
-      <input name="username" type="text" placeholder="username" required ngModel/>
-      <input name="password" type="password" placeholder="password" required ngModel/>
-      <input name="email" type="text" placeholder="email address" required ngModel/>
+      <input name="username" type="text" placeholder="username" required ngModel #username="ngModel"/>
+      <input name="password" type="password" placeholder="password" required ngModel #password="ngModel">
+      <input name="email" type="text" placeholder="email address" required  email ngModel #email="ngModel"/>
+      <div class="alert alert-danger " *ngIf="email.invalid && email.touched">Please enter a valid Email Address</div>
 
       <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>
 

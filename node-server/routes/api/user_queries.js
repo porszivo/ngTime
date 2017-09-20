@@ -3,11 +3,14 @@ var crypte = require('../../functions/password_crypt');
 var db = require('../../config/database');
 var config = require('../../config/config');
 var jwt = require('jsonwebtoken');
+var user = require('../../functions/user_functions');
+var sql = require('../../functions/loadQueries').users;
 
 module.exports = {
     createNewUser: createNewUser,
     loginUser: loginUser,
-    logoutUser: logoutUser
+    logoutUser: logoutUser,
+    getUserData: getUserData
 };
 
 /**
@@ -72,7 +75,31 @@ function loginUser(req, res, next) {
     }
 }
 
-function logoutUser(req, res, next) {
+function logoutUser(req, res, callback) {
     res.status(200)
         .send("Logged out");
+}
+
+function getUserData(req, res, callback) {
+    var token = req.headers.token;
+    console.log(token);
+    user.verifyToken(token, function(id) {
+        if(id < 0) {
+            res.status(401)
+                .json({
+                    message: 'Bad credentials'
+                });
+        }
+        db.any(sql.userData, id)
+            .then(function(data) {
+                res.status(200)
+                    .json({
+                        message: data
+                    })
+            })
+            .catch(function(err) {
+                console.log(err);
+                res.status(500);
+            });
+    })
 }

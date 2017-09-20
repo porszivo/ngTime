@@ -15,6 +15,9 @@ import {AppRoutingModule} from './app-routing.module';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AccessService} from './service/access.service';
+import {CustomFormsModule} from "ng2-validation";
+import { ProfileComponent } from './profile/profile.component';
+import {UserService} from "./service/user.service";
 
 @NgModule({
   declarations: [
@@ -25,18 +28,21 @@ import {AccessService} from './service/access.service';
     FillPipe,
     LoginComponent,
     TimesheetComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CustomFormsModule
   ],
   providers: [
     TimesheetbeanService,
     TaskService,
-    AccessService
+    AccessService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

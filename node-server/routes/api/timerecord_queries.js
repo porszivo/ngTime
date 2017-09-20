@@ -63,7 +63,8 @@ function createTimeRecord(req, res, next) {
                 })
         }
         //db.none(db.insert_sql, {task: req.body.task, dat: req.body.dat, duration: req.body.duration, comment: req.body.comment, uid: id})
-        var sql = 'insert into timerecord(task, dat, time, comment, uid) values (${task}, to_date(${dat}, \'DD-MM-YYYY\'), ${duration}, ${comment}, '+id+')';
+        var sql = 'insert into timerecord(task, dat, time, comment, uid) values ' +
+            '(${task}, to_date(${dat}, \'DD-MM-YYYY\'), ${duration}, ${comment}, '+id+')';
         db.none(sql, req.body)
             .then(function() {
                 res.status(200)

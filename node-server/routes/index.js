@@ -19,5 +19,6 @@ router.get('/api/tasks', timerecords.getAllTasks);
 router.post('/api/user', userq.createNewUser);
 router.post('/api/login', userq.loginUser);
 router.post('/api/logout', userq.logoutUser);
+router.get('/api/user', userq.getUserData);
 
 module.exports = router;
