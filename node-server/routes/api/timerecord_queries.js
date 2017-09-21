@@ -3,6 +3,9 @@ var user = require('../../functions/user_functions');
 var config = require('../../config/config');
 var sql = require('../../functions/loadQueries').timerecords;
 
+var trello = require('../../functions/trello_call');
+var apirequest = require('request');
+
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
     getSingleTimeRecord: getSingleTimeRecord,
@@ -21,7 +24,7 @@ function getAllTimeRecords(req, res, next) {
                     message: "Bad credentials"
                 })
         }
-        db.any('select r.id, r.task, r.dat, r.time, r.comment, t.name from timerecord r left join task t on t.id = r.task where uid = $1', id)
+        db.any('select r.id, r.task, r.dat, r.time, r.comment, t.name from timerecord r left join task t on t.id = r.task where uid = $1 ORDER BY r.dat DESC', id)
             .then(function (data) {
                 res.status(200)
                     .json({
@@ -109,6 +112,19 @@ function removeTimeRecord(req, res, next) {
 
 function getAllTasks(req, res, next) {
 
+    var tasks = [];
+    apirequest(trello.options, function(err, res, body) {
+        if (err) throw new Error(err);
+
+        var data = JSON.parse(body);
+        data.filter(function(item) {
+            tasks.push({id: item.id, name: item.name, type: 'trello'});
+        });
+        createNewTask(tasks, function() {
+            console.log("done");
+        });
+    });
+
     db.any('select * from task')
         .then(function(result) {
             res.status(200)
@@ -121,4 +137,20 @@ function getAllTasks(req, res, next) {
         .catch(function(err) {
             return next(err);
         })
+}
+
+function createNewTask(task) {
+    var ids = ['\'asdasdas\''];
+    task.filter(function(item) {
+        ids.push('\'' + item.id + '\'');
+    });
+    var qid = ids.join(',');
+    console.log(qid);
+    db.any('select id, name from task where id in ( $1^ )', qid)
+        .then(function(result){
+            task.filter(function(item) {
+                item.indexOf(result)
+            })
+        });
+
 }

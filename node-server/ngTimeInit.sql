@@ -14,22 +14,23 @@ CREATE TABLE user_tbl (
 );
 
 CREATE TABLE task (
-  ID SERIAL PRIMARY KEY,
+  ID VARCHAR PRIMARY KEY,
   name VARCHAR,
-  description VARCHAR
+  description VARCHAR,
+  type VARCHAR
 );
 
 CREATE TABLE timerecord (
   ID SERIAL PRIMARY KEY,
-  task INTEGER REFERENCES task (ID),
+  task VARCHAR REFERENCES task (ID),
   dat DATE,
   time NUMERIC,
   comment VARCHAR,
   uID INTEGER REFERENCES user_tbl (ID)
 );
 
-INSERT INTO task (name, description)
-    VALUES('Frontend', 'Angular Frontend');
+INSERT INTO task (id, name, description, type)
+    VALUES('asdasdas', 'Frontend', 'Angular Frontend', 'ng');
 
-INSERT INTO task (name, description)
-VALUES('Backend', 'Node Backend');
+INSERT INTO task (id, name, description, type)
+VALUES('asddasdasasdasd', 'Backend', 'Node Backend', 'ng');

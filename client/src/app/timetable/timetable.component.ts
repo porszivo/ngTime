@@ -14,6 +14,7 @@ export class TimetableComponent implements OnInit {
   timesheetBeans: TimesheetBean[];
   timesheetDirtyBeans: TimesheetBean[] = [];
   tasks: Task[];
+  today = new Date();
 
   constructor(private timesheetbeanService: TimesheetbeanService,
   private taskService: TaskService) { }
@@ -47,9 +48,12 @@ export class TimetableComponent implements OnInit {
   }
 
   saveSingleBean(dirtyBean: TimesheetBean) {
-    if (dirtyBean.task != null && dirtyBean.duration != null) {
+    if (dirtyBean.task != null && dirtyBean.duration != null && dirtyBean.dat != null) {
       this.trashNewRecord(dirtyBean);
       this.timesheetbeanService.newBean(dirtyBean);
+    } else {
+      dirtyBean.invalid = true;
+      this.isInvalid(dirtyBean);
     }
   }
 
@@ -60,6 +64,14 @@ export class TimetableComponent implements OnInit {
       if (index >= 0) {
         this.timesheetBeans.splice(index, 1);
       }
+    }
+  }
+
+  isInvalid(dirtyBean: TimesheetBean) {
+    if(dirtyBean.invalid) {
+      return "#e82727";
+    } else {
+      return;
     }
   }
 

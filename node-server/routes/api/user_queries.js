@@ -42,6 +42,7 @@ function createNewUser(req, res, next) {
  * Login of a User returning JWT
  */
 function loginUser(req, res, next) {
+    console.log(req.body);
     if(req.body['username'] && req.body['password']) {
         db.one(sql.userLogin, req.body['username'])
             .then(function (data) {
