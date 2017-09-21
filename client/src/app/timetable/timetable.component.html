@@ -12,14 +12,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let dirtyBean of timesheetDirtyBeans">
+    <tr *ngFor="let dirtyBean of timesheetDirtyBeans"
+        [style.background-color]="isInvalid(dirtyBean)">
       <td>
         <select [(ngModel)]="dirtyBean.task" required>
           <option *ngFor="let task of tasks" [value]="task.id">{{task.name}}</option>
         </select>
       </td>
       <td>
-        <input type="date" [value]="today | date : format : timezone">
+        <input [(ngModel)]="dirtyBean.dat" #dat="ngModel" type="date" name="dat" [maxDate]="today | date: 'yyyy-MM-dd'">
+        <p *ngIf="dat.errors?.maxDate" class="alert alert-danger">No future booking</p>
       </td>
       <td>
         <input [(ngModel)]="dirtyBean.duration" placeholder="0" type="number" min="0.5" max="8" step="0.5" required>
