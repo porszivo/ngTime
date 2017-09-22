@@ -18,6 +18,7 @@ import {AccessService} from './service/access.service';
 import {CustomFormsModule} from "ng2-validation";
 import { ProfileComponent } from './profile/profile.component';
 import {UserService} from "./service/user.service";
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {UserService} from "./service/user.service";
     FillPipe,
     LoginComponent,
     TimesheetComponent,
-    ProfileComponent
+    ProfileComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,

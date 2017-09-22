@@ -2,6 +2,7 @@ var db = require('../../config/database');
 var user = require('../../functions/user_functions');
 var config = require('../../config/config');
 var sql = require('../../functions/loadQueries').timerecords;
+var uuid = require('uuid');
 
 var trello = require('../../functions/trello_call');
 var apirequest = require('request');
@@ -11,7 +12,8 @@ module.exports = {
     getSingleTimeRecord: getSingleTimeRecord,
     createTimeRecord: createTimeRecord,
     removeTimeRecord: removeTimeRecord,
-    getAllTasks: getAllTasks
+    getAllTasks: getAllTasks,
+    createNewTask: createNewTask
 };
 
 function getAllTimeRecords(req, res, next) {
@@ -113,7 +115,7 @@ function removeTimeRecord(req, res, next) {
 function getAllTasks(req, res, next) {
 
     var tasks = [];
-    apirequest(trello.options, function(err, res, body) {
+    /*apirequest(trello.options, function(err, res, body) {
         if (err) throw new Error(err);
 
         var data = JSON.parse(body);
@@ -123,7 +125,7 @@ function getAllTasks(req, res, next) {
         createNewTask(tasks, function() {
             console.log("done");
         });
-    });
+    });*/
 
     db.any('select * from task')
         .then(function(result) {
@@ -139,18 +141,34 @@ function getAllTasks(req, res, next) {
         })
 }
 
-function createNewTask(task) {
-    var ids = ['\'asdasdas\''];
-    task.filter(function(item) {
-        ids.push('\'' + item.id + '\'');
-    });
-    var qid = ids.join(',');
-    console.log(qid);
-    db.any('select id, name from task where id in ( $1^ )', qid)
-        .then(function(result){
-            task.filter(function(item) {
-                item.indexOf(result)
-            })
-        });
+function createNewTask(req, res, callback) {
+    user.verifyToken(req.headers.token, function(data) {
+        if(data>=0) {
+            task = req.body;
+            task.id = uuid.v4();
+            task.type = 'ngTime';
+            writeTaskToDatabase(req.body, function(data) {
+                res.json({status: 200, message: true});
+            });
+        }
+    })
+    // task.filter(function(item) {
+    //     ids.push('\'' + item.id + '\'');
+    // });
+    // var qid = ids.join(',');
+    // console.log(qid);
+    // db.any('select id, name from task where id in ( $1^ )', qid)
+    //     .then(function(result){
+    //         task.filter(function(item) {
+    //             item.indexOf(result)
+    //         })
+    //     });
 
+}
+
+function writeTaskToDatabase(task) {
+    db.any('insert into task (id, name, description, type ) values ( ${id} , ${name} , ${description} , ${type} )', task)
+        .then(function() {
+            return;
+        })
 }
