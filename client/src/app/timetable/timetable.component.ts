@@ -3,7 +3,7 @@ import {TimesheetbeanService} from '../service/timesheetbean.service';
 import {TimesheetBean} from '../model/timesheetbean';
 import {Task} from '../model/task';
 import {TaskService} from '../service/task.service';
-
+// TODO: REWORK this, updates need to be triggered automatically
 @Component({
   selector: 'app-timetable',
   templateUrl: './timetable.component.html',

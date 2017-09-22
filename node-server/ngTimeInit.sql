@@ -28,9 +28,3 @@ CREATE TABLE timerecord (
   comment VARCHAR,
   uID INTEGER REFERENCES user_tbl (ID)
 );
-
-INSERT INTO task (id, name, description, type)
-    VALUES('asdasdas', 'Frontend', 'Angular Frontend', 'ng');
-
-INSERT INTO task (id, name, description, type)
-VALUES('asddasdasasdasd', 'Backend', 'Node Backend', 'ng');

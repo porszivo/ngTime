@@ -7,9 +7,11 @@ var cookieParser = require('cookie-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var log = require('./timelog/timelog');
 
 var app = express();
 
+log.log(2,"Start");
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");

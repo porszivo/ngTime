@@ -13,7 +13,9 @@ router.get('/api/timerecord', timerecords.getAllTimeRecords);
 router.get('/api/timerecord/:id', timerecords.getSingleTimeRecord);
 router.post('/api/timerecord', timerecords.createTimeRecord);
 router.delete('/api/timerecord/:id', timerecords.removeTimeRecord);
+
 router.get('/api/tasks', timerecords.getAllTasks);
+router.post('/api/tasks', timerecords.createNewTask);
 
 router.post('/api/user', userq.createNewUser);
 router.post('/api/login', userq.loginUser);
