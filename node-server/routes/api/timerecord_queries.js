@@ -16,6 +16,8 @@ module.exports = {
     createNewTask: createNewTask
 };
 
+var allTasks = [];
+
 function getAllTimeRecords(req, res, next) {
     req.body.task = parseInt(req.body.task);
     user.verifyToken(req.headers.token, function(id) {
@@ -114,7 +116,6 @@ function removeTimeRecord(req, res, next) {
 
 function getAllTasks(req, res, next) {
 
-    var tasks = [];
     /*apirequest(trello.options, function(err, res, body) {
         if (err) throw new Error(err);
 
@@ -126,19 +127,26 @@ function getAllTasks(req, res, next) {
             console.log("done");
         });
     });*/
+    if(allTasks.length === 0) {
+        getTasksFromDatabase(function(result) {
+            allTasks = result;
+            sendTasks(res);
+        });
+    } else {
+        sendTasks(res);
+    }
 
+    function sendTasks(res) {
+        res.json({data: allTasks});
+    }
+}
+
+function getTasksFromDatabase(callback) {
     db.any('select * from task')
         .then(function(result) {
-            res.status(200)
-                .json({
-                    status: 'succes',
-                    message: 'All Tasks',
-                    data: result
-                })
+            callback(result);
         })
-        .catch(function(err) {
-            return next(err);
-        })
+        .catch(function(error) { console.log(error); });
 }
 
 function createNewTask(req, res, callback) {
