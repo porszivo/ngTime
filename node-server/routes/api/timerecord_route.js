@@ -11,9 +11,7 @@ module.exports = {
     getAllTimeRecords: getAllTimeRecords,
     getSingleTimeRecord: getSingleTimeRecord,
     createTimeRecord: createTimeRecord,
-    removeTimeRecord: removeTimeRecord,
-    getAllTasks: getAllTasks,
-    createNewTask: createNewTask
+    removeTimeRecord: removeTimeRecord
 };
 
 var allTasks = [];
@@ -112,71 +110,4 @@ function removeTimeRecord(req, res, next) {
             });
     });
 
-}
-
-function getAllTasks(req, res, next) {
-
-    /*apirequest(trello.options, function(err, res, body) {
-        if (err) throw new Error(err);
-
-        var data = JSON.parse(body);
-        data.filter(function(item) {
-            tasks.push({id: item.id, name: item.name, type: 'trello'});
-        });
-        createNewTask(tasks, function() {
-            console.log("done");
-        });
-    });*/
-    if(allTasks.length === 0) {
-        getTasksFromDatabase(function(result) {
-            allTasks = result;
-            sendTasks(res);
-        });
-    } else {
-        sendTasks(res);
-    }
-
-    function sendTasks(res) {
-        res.json({data: allTasks});
-    }
-}
-
-function getTasksFromDatabase(callback) {
-    db.any('select * from task')
-        .then(function(result) {
-            callback(result);
-        })
-        .catch(function(error) { console.log(error); });
-}
-
-function createNewTask(req, res, callback) {
-    user.verifyToken(req.headers.token, function(data) {
-        if(data>=0) {
-            task = req.body;
-            task.id = uuid.v4();
-            task.type = 'ngTime';
-            writeTaskToDatabase(req.body, function(data) {
-                res.json({status: 200, message: true});
-            });
-        }
-    })
-    // task.filter(function(item) {
-    //     ids.push('\'' + item.id + '\'');
-    // });
-    // var qid = ids.join(',');
-    // console.log(qid);
-    // db.any('select id, name from task where id in ( $1^ )', qid)
-    //     .then(function(result){
-    //         task.filter(function(item) {
-    //             item.indexOf(result)
-    //         })
-    //     });
-
-}
-
-function writeTaskToDatabase(task) {
-    db.any('insert into task (id, name, description, type ) values ( ${id} , ${name} , ${description} , ${type} )', task)
-        .then(function() {
-            return;
-        })
 }

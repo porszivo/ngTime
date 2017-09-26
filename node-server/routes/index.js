@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var userq = require('./api/user_queries');
-var timerecords = require('./api/timerecord_queries');
+var userq = require('./api/user_route');
+var timerecords = require('./api/timerecord_route');
+var tasks = require('./api/task_route');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,8 +15,8 @@ router.get('/api/timerecord/:id', timerecords.getSingleTimeRecord);
 router.post('/api/timerecord', timerecords.createTimeRecord);
 router.delete('/api/timerecord/:id', timerecords.removeTimeRecord);
 
-router.get('/api/tasks', timerecords.getAllTasks);
-router.post('/api/tasks', timerecords.createNewTask);
+router.get('/api/tasks', tasks.getAllTasks);
+router.post('/api/tasks', tasks.createNewTask);
 
 router.post('/api/user', userq.createNewUser);
 router.post('/api/login', userq.loginUser);
