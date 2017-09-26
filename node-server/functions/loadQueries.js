@@ -14,5 +14,9 @@ module.exports = {
     },
     timerecords: {
         timerecordCreate: sql('./sql/timerecord_create.sql')
+    },
+    tasks: {
+        trelloInsert: sql('./sql/task_trello_insert.sql'),
+        taskInsert: sql('./sql/task_insert.sql')
     }
 };

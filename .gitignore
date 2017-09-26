@@ -75,3 +75,4 @@ typings/
 .env
 node-server/public/images/
 node-server/public/javascripts/
+!/node-server/bin/
