@@ -58,7 +58,6 @@ function getSingleTimeRecord(req, res, next) {
 }
 
 function createTimeRecord(req, res, next) {
-    req.body.task = parseInt(req.body.task);
     user.verifyToken(req.headers.token, function(id) {
         if(id<0) {
             res.status(401)
