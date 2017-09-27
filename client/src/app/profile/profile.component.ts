@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   favTask: string = null;
   totalHoursWeek: number = 0;
   totalHoursMonth: number = 0;
+  bla: boolean = false;
 
   constructor(private userService: UserService) { }
 

@@ -28,3 +28,12 @@ CREATE TABLE timerecord (
   comment VARCHAR,
   uID INTEGER REFERENCES user_tbl (ID)
 );
+
+CREATE TABLE trello_board (
+    ID SERIAL PRIMARY KEY,
+    uID INTEGER REFERENCES user_tbl (ID),
+    boardID VARCHAR,
+    boardName VARCHAR,
+    flag INTEGER DEFAULT 1,
+    UNIQUE(uID, boardID)
+);

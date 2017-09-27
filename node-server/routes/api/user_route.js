@@ -6,11 +6,17 @@ var jwt = require('jsonwebtoken');
 var user = require('../../functions/user_functions');
 var sql = require('../../functions/loadQueries').users;
 
+var trello = require('../../functions/trello_call');
+var apirequest = require('request');
+
 module.exports = {
     createNewUser: createNewUser,
     loginUser: loginUser,
     logoutUser: logoutUser,
-    getUserData: getUserData
+    getUserData: getUserData,
+    getTrelloBoards: getTrelloBoards,
+    addTrelloBoard: addTrelloBoard,
+    editTrelloBoard:editTrelloBoard
 };
 
 /**
@@ -42,7 +48,6 @@ function createNewUser(req, res, next) {
  * Login of a User returning JWT
  */
 function loginUser(req, res, next) {
-    console.log(req.body);
     if(req.body['username'] && req.body['password']) {
         db.one(sql.userLogin, req.body['username'])
             .then(function (data) {
@@ -82,7 +87,6 @@ function logoutUser(req, res, callback) {
 
 function getUserData(req, res, callback) {
     var token = req.headers.token;
-    console.log(token);
     user.verifyToken(token, function(id) {
         if(id < 0) {
             res.status(401)
@@ -102,4 +106,99 @@ function getUserData(req, res, callback) {
                 res.status(500);
             });
     })
+}
+
+/**
+ * TODO: POD
+ * @param req
+ * @param res
+ * @param callback
+ */
+function getTrelloBoards(req, res, callback) {
+    user.verifyToken(req.headers.token, function(id) {
+        if (id < 0) {
+            res.status(401)
+                .json({
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+        db.any(sql.userTrelloBoard, id)
+            .then(function(data) {
+                res.status(200)
+                    .json({
+                        status: 200
+                        , data: data})
+            })
+            .catch(function(err) {
+                console.log(err);
+                res.status(500);
+            });
+    });
+}
+
+function addTrelloBoard(req, res, callback) {
+    user.verifyToken(req.headers.token, function(id) {
+        if (id < 0) {
+            res.status(401)
+                .json({
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+        let board = {uid: id, boardid: req.body.boardid};
+        let url = trello.trellourl + board.boardid + '?' + trello.keyToken;
+        apirequest({method: 'GET', url: url}, function(error, response, body ) {
+            if(response.statusCode !== 200) {
+                res.status(400)
+                    .json({
+                        status: 400,
+                        message: 'Board not found!'
+                    })
+            } else {
+                board.boardname = JSON.parse(body).name;
+                db.any(sql.userTrelloBoardInsert, board)
+                 .then(function() {
+                    res.status(200)
+                        .json({
+                            status: 200,
+                            message: 'Board saved!'
+                        })
+                 })
+                    .catch(function(err) {
+                        res.status(400)
+                            .json({
+                                status: 400,
+                                message: 'Board already in Database!'
+                            })
+                    });
+            }
+        })
+
+    });
+}
+
+function editTrelloBoard(req, res, callback) {
+    user.verifyToken(req.headers.token, function(id) {
+        if (id < 0) {
+            res.status(401)
+                .json({
+                    status: 401,
+                    message: "Bad credentials"
+                })
+        }
+        var update = {id: id, old: req.body.old, val: req.body.val};
+        db.any(sql.userTrelloBoardUpdate, update)
+            .then(function() {
+                res.status(200)
+                    .json({
+                        status: 200,
+                        message: update.old + "was updated!"
+                    });
+            })
+            .catch(function(err) {
+                console.log(err);
+                callback(err);
+            });
+    });
 }
