@@ -26,7 +26,7 @@ function getAllTimeRecords(req, res, next) {
                     message: "Bad credentials"
                 })
         }
-        db.any('select r.id, r.task, r.dat, r.time, r.comment, t.name from timerecord r left join task t on t.id = r.task where uid = $1 ORDER BY r.dat DESC', id)
+        db.any(sql.timerecordSelect, id)
             .then(function (data) {
                 res.status(200)
                     .json({
@@ -36,7 +36,7 @@ function getAllTimeRecords(req, res, next) {
                     });
             })
             .catch(function (err) {
-                return next(err);
+                return console.log(err);
             });
     });
 }

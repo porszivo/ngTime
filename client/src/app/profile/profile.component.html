@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-body">
-    <h1>{{username}}</h1>
+    <h1 (mouseover)="bla=true" (mouseleave)="bla=false">{{username}} <a [routerLink]="['user_cp']"><i *ngIf="bla" class="fa fa-pencil" aria-hidden="true"></i></a></h1>
     <ul>
       <li>Favorite Task: {{favTask}}</li>
       <li>Total time this week: {{totalHoursWeek}}</li>
