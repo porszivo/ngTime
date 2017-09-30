@@ -28,7 +28,7 @@ module.exports = {
 function createNewUser(req, res, next) {
     req.body.password = crypte.cryptPassword(req.body.password);
     db.none(sql.userRegister, req.body)
-        .then(function() {
+        .then(() => {
             res.status(200)
                 .json({
                     status: 'success',
@@ -48,35 +48,28 @@ function createNewUser(req, res, next) {
  * Login of a User returning JWT
  */
 function loginUser(req, res, next) {
-    if(req.body['username'] && req.body['password']) {
-        db.one(sql.userLogin, req.body['username'])
-            .then(function (data) {
-                if (crypte.comparePassword(req.body['password'], data.password)) {
-                    var token = jwt.sign(
-                        {'id': data.id, 'name': data.name}, config.secret);
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.json({ status: 400, message: 'Bad request' })
+    } else {
+        db.one(sql.userLogin, username)
+            .then(data => {
+                if (crypte.comparePassword(password, data.password)) {
+                    const token = jwt.sign(
+                        { id: data.id, name: data.name },
+                        config.secret
+                    );
                     res.status(200)
                         .json({token: token});
                 } else {
-                    res.status(401)
-                        .json({
-                            status: 401,
-                            message: "Bad credentials"
-                        });
+                    return res
+                        .json({ status: 401, message: 'Bad credentials' })
                 }
             })
-            .catch(function (err) {
-                res.status(500)
-                    .json({
-                        status: 500,
-                        message: err.message
-                    });
+            .catch(err => {
+                console.error(err);
+                return res.status(500)
             })
-    } else {
-        res.status(401)
-            .json({
-                status: 401,
-                message: 'Bad credentials'
-            });
     }
 }
 
@@ -108,8 +101,14 @@ function getUserData(req, res, callback) {
     })
 }
 
+// const getUserDataAsync = async (req, res, callback) => {
+//     const userId = await userPromise(token);
+//     return res.status(200);
+// };
+
 /**
  * TODO: POD
+ *
  * @param req
  * @param res
  * @param callback

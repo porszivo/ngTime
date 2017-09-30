@@ -14,8 +14,6 @@ module.exports = {
     removeTimeRecord: removeTimeRecord
 };
 
-var allTasks = [];
-
 function getAllTimeRecords(req, res, next) {
     req.body.task = parseInt(req.body.task);
     user.verifyToken(req.headers.token, function(id) {
@@ -84,29 +82,14 @@ function createTimeRecord(req, res, next) {
 }
 
 function removeTimeRecord(req, res, next) {
-    var params = {};
     user.verifyToken(req.headers.token, function(id) {
-        if (id < 0) {
-            res.status(401)
-                .json({
-                    status: 401,
-                    message: "Bad credentials"
-                })
-        }
+        if (id < 0) { return res.status(401); }
 
-        params.id = parseInt(req.params.id);
-        params.uid = id;
-
-        db.result('delete from timerecord where id = ${id} AND uid = ${uid}', params)
-            .then(function (result) {
-                res.status(200)
-                    .json({
-                        status: 'success'
-                    });
-            })
+        let params = {id: parseInt(req.params.id), uid: id};
+        db.none('delete from timerecord where id = ${id} AND uid = ${uid}', params)
+            .then(() => res.status(200))
             .catch(function (err) {
                 return next(err);
             });
     });
-
 }
