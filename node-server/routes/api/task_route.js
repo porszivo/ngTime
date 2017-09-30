@@ -9,7 +9,8 @@ module.exports = {
     createNewTask: createNewTask
 };
 
-var allTasks = [];
+let allTasks = [];
+let url = trello.trellourl + "board.boardid" +  '?' + trello.keyToken;
 
 /**
  * REST Endpoint to get all Tasks
@@ -19,10 +20,18 @@ var allTasks = [];
  * @param next
  */
 function getAllTasks(req, res) {
-
-    getNewTrelloTasks(function(result) {
-        result.map(taskExistsInDatabase);
+    getAllTrelloBoards(boards => {
+        boards.map(function(obj) {
+            url = trello.trellourl + obj.boardid + '/' + trello.cards + '&' + trello.keyToken;
+            apirequest({method: 'GET', url: url}, function(err, res, body) {
+                JSON.parse(body).map(taskExistsInDatabase);
+            })
+        });
     });
+
+    /*getNewTrelloTasks(function(result) {
+        result.map(taskExistsInDatabase);
+    });*/
 
     getTasksFromDatabase(function(result) {
             allTasks = result;
@@ -61,13 +70,24 @@ function taskExistsInDatabase(task) {
  *
  * @param callback
  */
-function getNewTrelloTasks(callback) {
+function getTrelloTasks(callback) {
     apirequest(trello.options, function(err, res, body) {
         if(err) throw new Error(err);
 
-        var data = JSON.parse(body);
+        let data = JSON.parse(body);
         callback(data);
     })
+}
+
+/**
+ * @param callback
+ */
+function getAllTrelloBoards(callback) {
+    db.any('SELECT boardid FROM trello_board')
+        .then(function(result) {
+            callback(result);
+        })
+        .catch(errorhandling(err));
 }
 
 /**
@@ -111,4 +131,8 @@ function writeTaskToDatabase(task) {
             allTasks.push(task);
             return;
         })
+}
+
+function errorhandling(err) {
+    console.log("SQLError: " + err);
 }
