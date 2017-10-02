@@ -13,7 +13,7 @@ export class TaskService {
   private url = 'http://localhost:3000/api/tasks';
 
   getTasks(): Promise<Task[]> {
-    return this.http.get(this.url)
+    return this.http.get(this.url, { headers: this.accessService.getTokenHeader() })
       .toPromise()
       .then(result => {
         return result.json().data;

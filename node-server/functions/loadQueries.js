@@ -21,6 +21,7 @@ module.exports = {
     },
     tasks: {
         trelloInsert: sql('./sql/task_trello_insert.sql'),
-        taskInsert: sql('./sql/task_insert.sql')
+        taskInsert: sql('./sql/task_insert.sql'),
+        taskSelect: sql('./sql/task_select.sql')
     }
 };
