@@ -1,2 +1,2 @@
-insert into task (id, name, description, type )
-values ( ${id} , ${name} , ${description} , ${type} )
+insert into task (id, name, description, type, boardId )
+values ( ${id} , ${name} , ${description} , ${type}, ${boardid} )

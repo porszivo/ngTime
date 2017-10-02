@@ -1,13 +1,14 @@
-var crypte = require('../../functions/password_crypt');
+let crypte = require('../../functions/password_crypt');
 
-var db = require('../../config/database');
-var config = require('../../config/config');
-var jwt = require('jsonwebtoken');
-var user = require('../../functions/user_functions');
-var sql = require('../../functions/loadQueries').users;
+let db = require('../../config/database');
+let config = require('../../config/config');
+let jwt = require('jsonwebtoken');
+let user = require('../../functions/user_functions');
+let sql = require('../../functions/loadQueries').users;
 
-var trello = require('../../functions/trello_call');
-var apirequest = require('request');
+let trello = require('../../functions/trello_call');
+let apirequest = require('request');
+let task = require('./task_route');
 
 module.exports = {
     createNewUser: createNewUser,
@@ -101,11 +102,6 @@ function getUserData(req, res, callback) {
     })
 }
 
-// const getUserDataAsync = async (req, res, callback) => {
-//     const userId = await userPromise(token);
-//     return res.status(200);
-// };
-
 /**
  * TODO: POD
  *
@@ -146,26 +142,30 @@ function addTrelloBoard(req, res, callback) {
                 })
         }
         let board = {uid: id, boardid: req.body.boardid};
-        let url = trello.trellourl + board.boardid + '?' + trello.keyToken;
+        let url = trello.trellourl + board.boardid + trello.att + trello.keyToken;
         apirequest({method: 'GET', url: url}, function(error, response, body ) {
             if(response.statusCode !== 200) {
-                res.status(400)
+                return res.status(400)
                     .json({
                         status: 400,
                         message: 'Board not found!'
                     })
             } else {
+                board.uid = id;
+                let cards = JSON.parse(response.body).cards;
                 board.boardname = JSON.parse(body).name;
                 db.any(sql.userTrelloBoardInsert, board)
                  .then(function() {
-                    res.status(200)
+                    cards.map(x => x.boardid = board.boardid);
+                    cards.map(task.taskExistsInDatabase);
+                    return res.status(200)
                         .json({
                             status: 200,
                             message: 'Board saved!'
                         })
                  })
                     .catch(function(err) {
-                        res.status(400)
+                        return res.status(400)
                             .json({
                                 status: 400,
                                 message: 'Board already in Database!'

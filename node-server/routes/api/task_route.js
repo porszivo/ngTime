@@ -1,12 +1,14 @@
-var db = require('../../config/database');
-var config = require('../../config/config');
-var sql = require('../../functions/loadQueries').tasks;
-var trello = require('../../functions/trello_call');
-var apirequest = require('request');
+const db            = require('../../config/database');
+const config        = require('../../config/config');
+const sql           = require('../../functions/loadQueries').tasks;
+const trello        = require('../../functions/trello_call');
+const apirequest    = require('request');
+const user          = require('../../functions/user_functions');
 
 module.exports = {
     getAllTasks: getAllTasks,
-    createNewTask: createNewTask
+    createNewTask: createNewTask,
+    taskExistsInDatabase: taskExistsInDatabase
 };
 
 let allTasks = [];
@@ -20,27 +22,14 @@ let url = trello.trellourl + "board.boardid" +  '?' + trello.keyToken;
  * @param next
  */
 function getAllTasks(req, res) {
-    getAllTrelloBoards(boards => {
-        boards.map(function(obj) {
-            url = trello.trellourl + obj.boardid + '/' + trello.cards + '&' + trello.keyToken;
-            apirequest({method: 'GET', url: url}, function(err, res, body) {
-                JSON.parse(body).map(taskExistsInDatabase);
+    user.verifyToken(req.headers.token, (id) => {
+        if(id === -1) return res.status(500).json({ status: 500, message: "Bad credentials"});
+        db.any(sql.taskSelect, id)
+            .then((result) => {
+                return res.status(200).json({ status: 200, data: result});
             })
-        });
+            .catch((err) => console.log(err));
     });
-
-    /*getNewTrelloTasks(function(result) {
-        result.map(taskExistsInDatabase);
-    });*/
-
-    getTasksFromDatabase(function(result) {
-            allTasks = result;
-            sendTasks(res);
-    });
-
-    function sendTasks(res) {
-        res.json({data: allTasks});
-    }
 }
 
 /**
@@ -60,8 +49,6 @@ function taskExistsInDatabase(task) {
                 } else {
                     return writeTaskToDatabase(task);
                 }
-
-                //return taskId || t.one(sql.trelloInsert, task);
             });
     });
 }
