@@ -22,6 +22,7 @@ let url = trello.trellourl + "board.boardid" +  '?' + trello.keyToken;
  * @param next
  */
 function getAllTasks(req, res) {
+    updateTasks();
     user.verifyToken(req.headers.token, (id) => {
         if(id === -1) return res.status(500).json({ status: 500, message: "Bad credentials"});
         db.any(sql.taskSelect, id)
@@ -115,6 +116,7 @@ function createNewTask(req, res) {
 function writeTaskToDatabase(task) {
     db.any(sql.taskInsert, task)
         .then(function() {
+            console.log(task);
             allTasks.push(task);
             return;
         })
@@ -123,3 +125,18 @@ function writeTaskToDatabase(task) {
 function errorhandling(err) {
     console.log("SQLError: " + err);
 }
+
+function updateTasks() {
+    db.any("SELECT boardid FROM trello_board")
+        .then(boards => {
+            boards.map(x => {
+                let url = trello.trellourl + x.boardid + trello.att + trello.keyToken;
+                apirequest({method: 'GET', url: url}, function(error, response, body ) {
+                    let cards = JSON.parse(body).cards;
+                    cards.map(y => y.boardid = x.boardid);
+                    cards.map(taskExistsInDatabase);
+                }
+            );
+        });
+    });
+};
