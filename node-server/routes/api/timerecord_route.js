@@ -1,11 +1,8 @@
-var db = require('../../config/database');
-var user = require('../../functions/user_functions');
-var config = require('../../config/config');
-var sql = require('../../functions/loadQueries').timerecords;
-var uuid = require('uuid');
-
-var trello = require('../../functions/trello_call');
-var apirequest = require('request');
+let db = require('../../config/database');
+let user = require('../../functions/user_functions');
+let config = require('../../config/config');
+let sql = require('../../functions/loadQueries').timerecords;
+let uuid = require('uuid');
 
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
