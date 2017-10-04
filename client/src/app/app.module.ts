@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { OverviewComponent } from './overview/overview.component';
 import { WeekbeanComponent } from './weekbean/weekbean.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import {TimesheetbeanService} from './service/timesheetbean.service';
@@ -20,11 +19,11 @@ import { ProfileComponent } from './profile/profile.component';
 import {UserService} from "./service/user.service";
 import { TaskComponent } from './task/task.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    OverviewComponent,
     WeekbeanComponent,
     TimetableComponent,
     FillPipe,
@@ -32,7 +31,8 @@ import { UserPanelComponent } from './user-panel/user-panel.component';
     TimesheetComponent,
     ProfileComponent,
     TaskComponent,
-    UserPanelComponent
+    UserPanelComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,

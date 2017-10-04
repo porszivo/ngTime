@@ -1,8 +1,11 @@
 <ul>
-  <li *ngFor="let board of trelloBoards">Name: <span>{{board.boardname}}</span>,
-    BoardID:  <span (click)="isEdit=true" *ngIf="!isEdit">{{board.boardid}}</span>
+  <li *ngFor="let board of trelloBoards"><i class="fa fa-trello" aria-hidden="true"></i> <b>Name:</b> <span>{{board.boardname}}</span>
+    <b>BoardID:</b>  <span (click)="isEdit=true" *ngIf="!isEdit">{{board.boardid}}</span>
               <input #boardID [value]="board.boardid" *ngIf="isEdit" (blur)="editId(board.boardid, boardID.value); isEdit=false"
                                                     (keydown.enter)="editId(board.boardid, boardID.value); isEdit=false">
   </li>
-  <input type="text" #newBoardID> <i class="fa fa-floppy-o" aria-hidden="true" (click)="saveBoard(newBoardID.value)"></i>
+  <div class="input-field inline">
+    <input type="text" #newBoardID placeholder="New Board ID">
+    <button (click)="saveBoard(newBoardID.value)">add</button>
+  </div>
 </ul>
