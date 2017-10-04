@@ -1,22 +1,23 @@
 import {RouterModule, Routes} from '@angular/router';
-import {OverviewComponent} from './overview/overview.component';
 import {LoginComponent} from './login/login.component';
 import {NgModule} from '@angular/core';
 import {TimesheetComponent} from "./timesheet/timesheet.component";
 import {AccessService} from "./service/access.service";
 import {UserPanelComponent} from "./user-panel/user-panel.component";
 import {TimetableComponent} from "./timetable/timetable.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'timesheet', component: TimesheetComponent, canActivate: [AccessService],
-    children: [
+  { path: 'timesheet', component: TimesheetComponent, canActivate: [AccessService]},
+  { path: 'usercp', component: UserPanelComponent, canActivate: [AccessService]},
+  /*  children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-      { path: 'dashboard', component: TimetableComponent },
-      { path: 'user_cp', component: UserPanelComponent }
+      { path: 'dashboard', component: DashboardComponent },
+      { path: '**', component: TimetableComponent, pathMatch: 'full' }
     ]
-  },
+  },*/
   { path: '**', redirectTo: '/timesheet', pathMatch: 'full' }
 ];
 
