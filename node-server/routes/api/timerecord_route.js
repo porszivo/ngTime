@@ -1,8 +1,6 @@
-let db = require('../../config/database');
-let user = require('../../functions/user_functions');
-let config = require('../../config/config');
-let sql = require('../../functions/loadQueries').timerecords;
-let uuid = require('uuid');
+let db = require("../../config/database");
+let user = require("../../functions/user_functions");
+let sql = require("../../functions/loadQueries").timerecords;
 
 module.exports = {
     getAllTimeRecords: getAllTimeRecords,
@@ -11,7 +9,7 @@ module.exports = {
     removeTimeRecord: removeTimeRecord
 };
 
-function getAllTimeRecords(req, res, next) {
+function getAllTimeRecords(req, res) {
     req.body.task = parseInt(req.body.task);
     user.verifyToken(req.headers.token, function(id) {
         if (id < 0) {
@@ -19,15 +17,15 @@ function getAllTimeRecords(req, res, next) {
                 .json({
                     status: 401,
                     message: "Bad credentials"
-                })
+                });
         }
         db.any(sql.timerecordSelect, id)
             .then(function (data) {
                 res.status(200)
                     .json({
-                        status: 'success',
+                        status: "success",
                         data: data,
-                        message: 'Retrieved ALL records'
+                        message: "Retrieved ALL records"
                     });
             })
             .catch(function (err) {
@@ -38,13 +36,13 @@ function getAllTimeRecords(req, res, next) {
 
 function getSingleTimeRecord(req, res, next) {
     var pupID = parseInt(req.params.id);
-    db.one('select * from timerecord where id = $1', pupID)
+    db.one("select * from timerecord where id = $1", pupID)
         .then(function (data) {
             res.status(200)
                 .json({
-                    status: 'success',
+                    status: "success",
                     data: data,
-                    message: 'Retrieved ONE record'
+                    message: "Retrieved ONE record"
                 });
         })
         .catch(function (err) {
@@ -59,16 +57,16 @@ function createTimeRecord(req, res, next) {
                 .json({
                     status: 401,
                     message: "Bad credentials"
-                })
+                });
         }
-        var params = req.body;
+        let params = req.body;
         params.id = id;
         db.none(sql.timerecordCreate, params)
             .then(function() {
                 res.status(200)
                     .json({
-                        status: 'success',
-                        message: 'Inserted record'
+                        status: "success",
+                        message: "Inserted record"
                     });
             })
             .catch(function(err){
@@ -83,7 +81,7 @@ function removeTimeRecord(req, res, next) {
         if (id < 0) { return res.status(401); }
 
         let params = {id: parseInt(req.params.id), uid: id};
-        db.none('delete from timerecord where id = ${id} AND uid = ${uid}', params)
+        db.none("delete from timerecord where id = ${id} AND uid = ${uid}", params)
             .then(() => res.status(200))
             .catch(function (err) {
                 return next(err);
