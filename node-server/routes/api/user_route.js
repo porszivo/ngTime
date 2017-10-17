@@ -1,14 +1,14 @@
-let crypte = require('../../functions/password_crypt');
+let crypte = require("../../functions/password_crypt");
 
-let db = require('../../config/database');
-let config = require('../../config/config');
-let jwt = require('jsonwebtoken');
-let user = require('../../functions/user_functions');
-let sql = require('../../functions/loadQueries').users;
+let db = require("../../config/database");
+let config = require("../../config/config");
+let jwt = require("jsonwebtoken");
+let user = require("../../functions/user_functions");
+let sql = require("../../functions/loadQueries").users;
 
-let trello = require('../../functions/trello_call');
-let apirequest = require('request');
-let task = require('./task_route');
+let trello = require("../../functions/trello_call");
+let apirequest = require("request");
+let task = require("./task_route");
 
 module.exports = {
     createNewUser: createNewUser,
@@ -32,14 +32,14 @@ function createNewUser(req, res, next) {
         .then(() => {
             res.status(200)
                 .json({
-                    status: 'success',
-                    message: 'Inserted record'
+                    status: "success",
+                    message: "Inserted record"
                 });
         })
         .catch(function(err){
             res.status(500)
                 .json({
-                    status: 'error',
+                    status: "error",
                     message: err.detail
                 });
         });
@@ -51,7 +51,7 @@ function createNewUser(req, res, next) {
 function loginUser(req, res, next) {
     const { username, password } = req.body;
     if (!username || !password) {
-        return res.json({ status: 400, message: 'Bad request' })
+        return res.json({ status: 400, message: "Bad request" })
     } else {
         db.one(sql.userLogin, username)
             .then(data => {
@@ -64,7 +64,7 @@ function loginUser(req, res, next) {
                         .json({token: token});
                 } else {
                     return res
-                        .json({ status: 401, message: 'Bad credentials' })
+                        .json({ status: 401, message: "Bad credentials" })
                 }
             })
             .catch(err => {
@@ -85,7 +85,7 @@ function getUserData(req, res, callback) {
         if(id < 0) {
             res.status(401)
                 .json({
-                    message: 'Bad credentials'
+                    message: "Bad credentials"
                 });
         }
         db.any(sql.userData, id)
@@ -103,12 +103,11 @@ function getUserData(req, res, callback) {
 }
 
 /**
- * TODO: POD
- *
  * @param req
  * @param res
  * @param callback
  */
+
 function getTrelloBoards(req, res, callback) {
     user.verifyToken(req.headers.token, function(id) {
         if (id < 0) {
@@ -143,12 +142,14 @@ function addTrelloBoard(req, res, callback) {
         }
         let board = {uid: id, boardid: req.body.boardid};
         let url = trello.trellourl + board.boardid + trello.att + trello.keyToken;
-        apirequest({method: 'GET', url: url}, function(error, response, body ) {
+        console.log(url);
+        apirequest({method: "GET", url: url}, function(error, response, body ) {
             if(response.statusCode !== 200) {
                 return res.status(400)
                     .json({
                         status: 400,
-                        message: 'Board not found!'
+                        message: "Board not found!",
+                        error: response.body
                     })
             } else {
                 board.uid = id;
@@ -161,14 +162,14 @@ function addTrelloBoard(req, res, callback) {
                     return res.status(200)
                         .json({
                             status: 200,
-                            message: 'Board saved!'
+                            message: "Board saved!"
                         })
                  })
                     .catch(function(err) {
                         return res.status(400)
                             .json({
                                 status: 400,
-                                message: 'Board already in Database!'
+                                message: "Board already in Database!"
                             })
                     });
             }

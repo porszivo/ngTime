@@ -10,16 +10,8 @@ CREATE TABLE user_tbl (
   email VARCHAR,
   confirmhash VARCHAR,
   activated BOOLEAN default FALSE,
-  failed_try INTEGER default 0
-);
-
-CREATE TABLE timerecord (
-  ID SERIAL PRIMARY KEY,
-  task VARCHAR REFERENCES task (ID),
-  dat DATE,
-  time NUMERIC,
-  comment VARCHAR,
-  uID INTEGER REFERENCES user_tbl (ID)
+  failed_try INTEGER default 0,
+  trello_token VARCHAR NULLABLE
 );
 
 CREATE TABLE trello_board (
@@ -37,4 +29,13 @@ CREATE TABLE task (
   description VARCHAR,
   type VARCHAR,
   boardId VARCHAR REFERENCES trello_board (boardid)
+);
+
+CREATE TABLE timerecord (
+  ID SERIAL PRIMARY KEY,
+  task VARCHAR REFERENCES task (ID),
+  dat DATE,
+  time NUMERIC,
+  comment VARCHAR,
+  uID INTEGER REFERENCES user_tbl (ID)
 );

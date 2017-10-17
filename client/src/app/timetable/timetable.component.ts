@@ -33,7 +33,10 @@ export class TimetableComponent implements OnInit {
 
   listTasks() {
     this.taskService.getTasks()
-      .then(tasks => this.tasks = tasks);
+      .then(tasks => {
+        console.log(tasks);
+        this.tasks = tasks
+      });
   }
 
   newRecord() {
@@ -49,6 +52,7 @@ export class TimetableComponent implements OnInit {
 
   saveSingleBean(dirtyBean: TimesheetBean) {
     if (dirtyBean.task != null && dirtyBean.duration != null && dirtyBean.dat != null) {
+      console.log(dirtyBean.task);
       this.trashNewRecord(dirtyBean);
       this.timesheetbeanService.newBean(dirtyBean);
     } else {
