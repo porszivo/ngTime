@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import {Http} from "@angular/http";
-import {AccessService} from "./access.service";
+import {Injectable} from '@angular/core';
+import {AccessService} from './access.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class UserService {
@@ -8,10 +8,11 @@ export class UserService {
   // TODO: Global
   private url: string = 'http://localhost:3000/api';
 
-  constructor(private http: Http, private accessService: AccessService) { }
+  constructor(private http: HttpClient, private accessService: AccessService) {
+  }
 
   getUserData(): Promise<any> {
-    return this.http.get(this.url + "/user", { headers: this.accessService.getTokenHeader()})
+    return this.http.get(this.url + '/user', {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(data => {
         return data.json().message[0];
@@ -20,7 +21,7 @@ export class UserService {
   }
 
   getTrelloBoards(): Promise<any> {
-    return this.http.get(this.url + "/trelloBoard", { headers: this.accessService.getTokenHeader() })
+    return this.http.get(this.url + '/trelloBoard', {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(data => {
         return data.json().data;
@@ -29,14 +30,17 @@ export class UserService {
   }
 
   editTrelloBoard(oldval, newval): Promise<any> {
-    return this.http.put(this.url + "/trelloBoard", {old: oldval, val: newval}, { headers: this.accessService.getTokenHeader() })
+    return this.http.put(this.url + '/trelloBoard', {
+      old: oldval,
+      val: newval
+    }, {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then();
   }
 
   addTrelloBoard(board): Promise<any> {
     console.log(board);
-    return this.http.post(this.url + "/trelloBoard", { boardid: board }, { headers: this.accessService.getTokenHeader() })
+    return this.http.post(this.url + '/trelloBoard', {boardid: board}, {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(data => {
         return data.json();

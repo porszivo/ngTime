@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class AccessService implements CanActivate {
@@ -14,7 +15,7 @@ export class AccessService implements CanActivate {
 
   private url = 'http://localhost:3000/api';
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   canActivate() {
