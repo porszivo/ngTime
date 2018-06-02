@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
-import {Http} from "@angular/http";
-import {Task} from "../model/task";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/catch";
-import {AccessService} from "./access.service";
+import {Injectable} from '@angular/core';
+import {Task} from '../model/task';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import {AccessService} from './access.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class TaskService {
 
-  constructor(private http: Http, private accessService : AccessService) { }
+  constructor(private http: HttpClient, private accessService: AccessService) {
+  }
 
   private url = 'http://localhost:3000/api/tasks';
 
   getTasks(): Promise<Task[]> {
-    return this.http.get(this.url, { headers: this.accessService.getTokenHeader() })
+    return this.http.get(this.url, {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(result => {
         return result.json().data;
@@ -22,7 +23,7 @@ export class TaskService {
   }
 
   createNewTask(param: { name: string; description: string }) {
-    return this.http.post(this.url, param , { headers: this.accessService.getTokenHeader() })
+    return this.http.post(this.url, param, {headers: this.accessService.getTokenHeader()})
       .toPromise()
       .then(data => {
         return data.json().message;
