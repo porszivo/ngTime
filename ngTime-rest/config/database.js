@@ -1,11 +1,11 @@
-var promise = require('bluebird');
-var config = require('./config');
-var options = {
+const promise = require('bluebird');
+const config = require('./config');
+const options = {
     promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
-var connectionString = config.database;
-var db = pgp(connectionString);
+const pgp = require('pg-promise')(options);
+const connectionString = config.database;
+const db = pgp(connectionString);
 
 module.exports = db;
