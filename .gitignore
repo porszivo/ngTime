@@ -76,3 +76,5 @@ typings/
 node-server/public/images/
 node-server/public/javascripts/
 !/node-server/bin/
+
+**/config.js
