@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import {UserService} from "../service/user.service";
+import { Component } from '@angular/core';
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-user-panel',
   templateUrl: './user-panel.component.html',
   styleUrls: ['./user-panel.component.css']
 })
-export class UserPanelComponent implements OnInit {
+export class UserPanelComponent {
 
-  constructor(private userService: UserService) { }
-
-  ngOnInit() {
+  constructor(private userService: UserService) {
   }
 
 }

@@ -1,6 +1,8 @@
-import {Injectable} from '@angular/core';
-import {AccessService} from './access.service';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AccessService } from './access.service';
+import { HttpClient } from '@angular/common/http';
+import { promise } from 'selenium-webdriver';
+import Promise = promise.Promise;
 
 /**
  * TODO: Needs refactoring
@@ -9,7 +11,7 @@ import {HttpClient} from '@angular/common/http';
 export class UserService {
 
   // TODO: Global
-  private url: string = 'http://localhost:3000/api';
+  private url = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient, private accessService: AccessService) {
   }
@@ -17,7 +19,7 @@ export class UserService {
   getUserData(): Promise<any> {
     return this.http.get(this.url + '/user',
       // {headers: this.accessService.getTokenHeader()}
-      )
+    )
       .toPromise()
       .then(data => {
         return data;
@@ -30,7 +32,7 @@ export class UserService {
    * @param error
    * @returns {Promise<never>}
    */
-  private handleError(error: any): Promise<any> {
+  private handleError(error: any) {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }

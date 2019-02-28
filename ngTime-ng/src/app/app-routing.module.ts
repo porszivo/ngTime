@@ -1,13 +1,13 @@
-import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './login/login.component';
-import {NgModule} from '@angular/core';
-import {AccessService} from "./service/access.service";
-import {UserPanelComponent} from "./user-panel/user-panel.component";
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { NgModule } from '@angular/core';
+import { AccessService } from './service/access.service';
+import { UserPanelComponent } from './user-panel/user-panel.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'usercp', component: UserPanelComponent, canActivate: [AccessService]},
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
+  {path: 'usercp', component: UserPanelComponent, canActivate: [AccessService]},
   /** No Children needed currently **/
   /*  children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -15,12 +15,13 @@ const routes: Routes = [
       { path: '**', component: TimetableComponent, pathMatch: 'full' }
     ]
   },*/
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  {path: '**', redirectTo: '/', pathMatch: 'full'}
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes)],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

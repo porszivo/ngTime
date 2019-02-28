@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * TODO: Needs complete refactoring
@@ -13,7 +13,6 @@ export class AccessService implements CanActivate {
   private token = null;
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private options = this.headers;
 
   private url = 'http://localhost:3000/api';
 
@@ -42,9 +41,8 @@ export class AccessService implements CanActivate {
     if (this.token == null) {
       return null;
     }
-    let headers = new Headers({'Content-Type': 'application/json'});
-    headers.append(this.token_name, this.token);
-    return headers;
+    this.headers.append(this.token_name, this.token);
+    return this.headers;
 
   }
 
@@ -96,7 +94,7 @@ export class AccessService implements CanActivate {
   }
 
   logoutUser() {
-    this.http.post(this.url + "/logout", {})
+    this.http.post(this.url + '/logout', {})
       .toPromise()
       .then(res => {
         if (res['status'] === 200) {

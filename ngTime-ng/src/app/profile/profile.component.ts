@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Task} from "../model/task";
-import {UserService} from "../service/user.service";
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,11 +10,12 @@ export class ProfileComponent implements OnInit {
 
   username: string = null;
   favTask: string = null;
-  totalHoursWeek: number = 0;
-  totalHoursMonth: number = 0;
-  bla: boolean = false;
+  totalHoursWeek = 0;
+  totalHoursMonth = 0;
+  bla = false;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit() {
     this.initUserData();

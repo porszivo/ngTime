@@ -4,5 +4,5 @@ export class TimesheetBean {
   dat: string = null;
   duration: number = null;
   comment: string = null;
-  invalid: boolean = false;
+  invalid = false;
 }

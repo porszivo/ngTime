@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {AccessService} from '../service/access.service';
-import {Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { AccessService } from '../service/access.service';
+import { Router } from '@angular/router';
 
 // TODO: Better animation: change of register and login view
 
@@ -15,7 +15,8 @@ export class LoginComponent {
   errorMessage = '';
   errorState = false;
 
-  constructor(private accessService: AccessService, private router: Router) {}
+  constructor(private accessService: AccessService, private router: Router) {
+  }
 
   onSubmit(form: NgForm) {
 
@@ -27,12 +28,12 @@ export class LoginComponent {
       } else {
         this.accessService.registerUser(form.value['username'], form.value['password'], form.value['email'])
           .then(success => {
-            if(success) {
+            if (success) {
               this.loginView = true;
               this.errorState = false;
             } else {
               this.errorState = !success;
-              this.errorMessage = "Woops,... something went wrong!";
+              this.errorMessage = 'Woops,... something went wrong!';
             }
           });
       }
@@ -43,9 +44,11 @@ export class LoginComponent {
       } else {
         this.accessService.loginUser(form.value['username'], form.value['password'])
           .then(success => {
-            if (success) this.router.navigate(['timesheet']);
+            if (success) {
+              this.router.navigate(['timesheet']);
+            }
             this.errorState = !success;
-            this.errorMessage = "Username or Password is wrong!";
+            this.errorMessage = 'Username or Password is wrong!';
           });
       }
     }
