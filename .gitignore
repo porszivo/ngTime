@@ -1,6 +1,5 @@
 .idea
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
