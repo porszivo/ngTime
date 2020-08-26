@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AccessService } from './access.service';
 import { HttpClient } from '@angular/common/http';
-import { promise } from 'selenium-webdriver';
-import Promise = promise.Promise;
 
 /**
  * TODO: Needs refactoring
