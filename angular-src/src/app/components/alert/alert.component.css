@@ -1,0 +1,9 @@
+.alert-wrapper {
+    position: relative;
+}
+
+.alert-box {
+    position: absolute;
+    width: 50%;
+    margin: 1em 0 0 25%;
+}

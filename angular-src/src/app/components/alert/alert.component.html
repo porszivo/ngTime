@@ -1,0 +1,9 @@
+<div *ngFor="let alert of alerts" class="alert-wrapper">
+    <div class="alert alert-danger alert-box" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                (click)="clearAlert(alert)"></button>
+        <span [innerHTML]="alert"></span>
+    </div>
+</div>
+
+

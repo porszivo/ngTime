@@ -1,0 +1,44 @@
+<div class="login-page">
+    <div class="form">
+        <form class="register" *ngIf="!loginView" #registerForm="ngForm" (ngSubmit)="register()">
+
+            <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>
+
+            <input name="username" id="username" class="input-field validate" placeholder="username" type="text"
+                   required
+                   [(ngModel)]="formModel.username" #username="ngModel"/>
+            <input name="password" id="password" class="input-field" type="password" placeholder="password" required
+                   [(ngModel)]="formModel.password"
+                   #password="ngModel">
+            <input name="email" id="email" class="input-field validate" type="email" placeholder="email address"
+                   required
+                   [(ngModel)]="formModel.email"
+                   #email="ngModel"/>
+            <div class="alert alert-danger" *ngIf="email.invalid && email.touched">Please enter a valid Email Address
+            </div>
+
+            <button type="submit" [disabled]="!registerForm.valid">create</button>
+            <p class="message">Have an account? <span
+                (click)="(loginView = !loginView) && (errorState = false)">Log in</span>
+            </p>
+        </form>
+
+        <form class="login" *ngIf="loginView" #loginForm="ngForm" (ngSubmit)="login()">
+
+            <input name="username" type="text" placeholder="username"
+                   required
+                   [(ngModel)]="formModel.username"
+            />
+            <input name="password" type="password" placeholder="password"
+                   required
+                   [(ngModel)]="formModel.password"
+            />
+
+            <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>
+
+            <button type="submit" [disabled]="!loginForm.valid">login</button>
+            <p class="message">No account? <span
+                (click)="(loginView = !loginView) && (errorState = false)">Sign up</span></p>
+        </form>
+    </div>
+</div>
