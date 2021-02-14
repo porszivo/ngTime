@@ -25,7 +25,18 @@ export class LoginComponent {
     }
 
     login(): void {
-        console.log(this.formModel);
+        this.accessService.loginUser(this.formModel).pipe(
+            first()
+        ).subscribe({
+            next: ret => {
+                this.accessService.setToken(ret.token);
+            },
+            error: error => {
+                if (error.status === 401) {
+                    this.alertService.error('User not found or wrong password!');
+                }
+            }
+        });
     }
 
     register(): void {

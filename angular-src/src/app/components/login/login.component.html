@@ -1,5 +1,6 @@
 <div class="login-page">
     <div class="form">
+        <h2>Anmeldung</h2>
         <form class="register" *ngIf="!loginView" #registerForm="ngForm" (ngSubmit)="register()">
 
             <div *ngIf="errorState" class="alert alert-danger">{{errorMessage}}</div>

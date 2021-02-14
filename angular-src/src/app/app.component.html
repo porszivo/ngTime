@@ -1,7 +1,28 @@
-<app-navigation></app-navigation>
-<app-alert></app-alert>
-<div class="container">
-
-    <router-outlet></router-outlet>
-
-</div>
+<mat-sidenav-container class="h-screen w-screen">
+    <mat-sidenav opened mode="side" class="sidenav" fixedInViewport>
+        <mat-toolbar>TT</mat-toolbar>
+        <mat-nav-list>
+            <div class="mat-list-item-bottom">
+                <a mat-list-item>
+                    <button mat-icon-button>
+                        <mat-icon inline=true fontSet="fa" fontIcon="fa-bell" aria-label="Notifications"></mat-icon>
+                    </button>
+                </a>
+                <a mat-list-item>
+                    <button mat-icon-button>
+                        <mat-icon inline=true fontSet="fa" fontIcon="fa-user" aria-label="User Account"></mat-icon>
+                    </button>
+                </a>
+                <a mat-list-item>
+                    <button mat-icon-button (click)="logout()">
+                        <mat-icon inline=true fontSet="fas" fontIcon="fa-door-open" aria-label="logout"></mat-icon>
+                    </button>
+                </a>
+            </div>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <app-alert></app-alert>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

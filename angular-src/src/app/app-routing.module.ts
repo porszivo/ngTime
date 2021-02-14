@@ -5,15 +5,14 @@ import { AccessService } from './services/access.service';
 import { UserPanelComponent } from './components/user-panel/user-panel.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'usercp', component: UserPanelComponent, canActivate: [AccessService]},
-  {path: '**', redirectTo: '/', pathMatch: 'full'}
+    {path: '', component: UserPanelComponent, canActivate: [AccessService]},
+    {path: 'login', component: LoginComponent},
+    {path: '**', redirectTo: '/', pathMatch: 'full'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})],
+    exports: [RouterModule]
 })
 
 export class AppRoutingModule {

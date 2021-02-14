@@ -11,34 +11,44 @@ import { AccessService } from './services/access.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UserService } from './services/user.service';
 import { UserPanelComponent } from './components/user-panel/user-panel.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CustomFormsModule } from 'ngx-custom-validators';
 import { AlertComponent } from './components/alert/alert.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FillPipe,
-    LoginComponent,
-    ProfileComponent,
-    UserPanelComponent,
-    NavigationComponent,
-    AlertComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    AppRoutingModule,
-    CustomFormsModule
-  ],
-  providers: [
-    AccessService,
-    UserService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        FillPipe,
+        LoginComponent,
+        ProfileComponent,
+        UserPanelComponent,
+        AlertComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        FormsModule,
+        AppRoutingModule,
+        CustomFormsModule,
+        MatSidenavModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule
+    ],
+    providers: [
+        AccessService,
+        UserService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

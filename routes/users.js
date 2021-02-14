@@ -36,7 +36,7 @@ router.post('/login', (req, res, next) => {
 
     User.getUserByUsername(username).then(user => {
         if (!user) {
-            return res.status(404).json({message: 'User not found'}).send();
+            return res.status(401).send();
         }
         User.verifyPassword(password, user, (err, isMatch) => {
             if (isMatch) {

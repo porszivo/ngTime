@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
+import { Alert } from '../../model/Alert';
+import { AlertType } from '../../model/AlertType';
 
 @Component({
     selector: 'app-alert',
@@ -9,7 +11,7 @@ import { AlertService } from '../../services/alert.service';
 })
 export class AlertComponent implements OnInit {
 
-    alerts: string[] = [];
+    alerts: Alert[] = [];
     private alertSubscription: Subscription;
 
     constructor(private alertService: AlertService) {
@@ -25,8 +27,18 @@ export class AlertComponent implements OnInit {
             );
     }
 
-    clearAlert(alert: string): void {
+    clearAlert(alert: Alert): void {
         this.alerts = this.alerts.filter(x => x !== alert);
     }
 
+    getAlertType(alert: Alert): string {
+        switch (alert.type) {
+            case AlertType.ERROR:
+                return 'alert-danger';
+            case AlertType.INFO:
+                return 'alert-info';
+            case AlertType.WARNING:
+                return 'alert-warning';
+        }
+    }
 }

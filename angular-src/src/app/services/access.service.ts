@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AccessService implements CanActivate {
 
-    private token_name = 'token';
+    private tokenName = 'token';
     private token = null;
 
     private headers = new Headers({'Content-Type': 'application/json'});
@@ -17,7 +17,7 @@ export class AccessService implements CanActivate {
     constructor(private http: HttpClient, private router: Router) {
     }
 
-    canActivate() {
+    canActivate(): boolean {
         this.readToken();
         if (this.token != null) {
             return true;
@@ -28,40 +28,38 @@ export class AccessService implements CanActivate {
     }
 
     readToken(): void {
-        const token = localStorage.getItem(this.token_name);
+        const token = localStorage.getItem(this.tokenName);
         if (token) {
             this.token = token;
         }
     }
 
-    getTokenHeader(): Headers {
+    setToken(token: string): void {
+        this.token = token;
+        localStorage.setItem(this.tokenName, this.token);
+        this.router.navigate(['/usercp']);
+    }
 
+    getTokenHeader(): Headers {
         if (this.token == null) {
             return null;
         }
-        this.headers.append(this.token_name, this.token);
+        this.headers.append(this.tokenName, this.token);
         return this.headers;
 
     }
 
-    writeToken() {
-        localStorage.setItem(this.token_name, this.token);
-    }
-
-    removeToken() {
-        localStorage.removeItem(this.token_name);
-        this.token = null;
-    }
-
-    loginUser(username: string, password: string): Subscription {
-        return null;
+    loginUser(user: User): Observable<any> {
+        return this.http.post(`${this.url}/login`, user);
     }
 
     registerUser(user: User): Observable<any> {
         return this.http.post(`${this.url}/register`, user);
     }
 
-    logoutUser() {
+    logoutUser(): void {
+        localStorage.removeItem(this.tokenName);
+        this.token = null;
     }
 
 }
